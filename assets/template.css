@@ -1,0 +1,83 @@
+/* @mixin breakpoint($value) {
+    @if $value == "phone" {
+      @media only screen and (min-width: 120px) and (max-width: 767px) {
+        @content;
+      }
+    } @else if $value == "tablet" {
+      @media only screen and (min-width: 768px) and (max-width: 1024px) {
+        @content;
+      }
+    } @else if $value == "touch" {
+      @media only screen and (min-width: 120px) and (max-width: 1024px) {
+        @content;
+      }
+    } @else if $value == "desktop" {
+      @media only screen and (min-width: 1025px) {
+        @content;
+      }
+    } @else {
+      @media only screen and (max-width: $value) {
+        @content;
+      }
+    }
+  } */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+  font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+  --orange: #f05a2b;
+  --yellow: #f7b74f;
+  --price: #f5c41f;
+  --lightBlue: #87c5ec;
+  --darkGb: #2f797a;
+  --mediumGb: #318c8c;
+  --lightGb: #7cc9c2;
+  --almostBlack: #2e2d2c;
+  --darkGrey: #3c3c3b;
+  --lightGrey: #575756;
+  --whitish: #f7f7f7;
+  --white: #ffffff;
+  --greyArrow: #a7a7a7;
+  --greyBallon: #f3f5f9;
+  --greyDots: #d9d9d9;
+  --aboutPara: #1d1d1d;
+  --formGrey: #878787;
+  --orangeBtn: #f05a28;
+  --orangeBtnHover: #c54b1a;
+  --lightBlueBtn: #87c5ec;
+  --lightBlueBtnHover: #4a7abc;
+}
+
+.wrap {
+  max-width: 1220px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+
+  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+    padding: 0 24px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    padding: 0 20px;
+  }
+}
+
+button {
+  border: none;
+  background: none;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.has-cover {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
