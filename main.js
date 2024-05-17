@@ -73,7 +73,7 @@ const additionalInputElement = (counter) => {
       <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
       <input
         type="date"
-        name="grupno_datum_rodjenja[]"
+        name="grupni_datum_rodjenja[]"
         id="date-of-birth"
         class="forma__input"
         placeholder="20/11/1998"
@@ -84,7 +84,7 @@ const additionalInputElement = (counter) => {
       <label class="forma__label" for="passport-number">Broj Pasosa</label>
       <input
         type="number"
-        name="grupno_broj_pasosa[]"
+        name="grupni_broj_pasosa[]"
         id="passport-number"
         class="forma__input"
         placeholder="0012371238719"
@@ -113,7 +113,7 @@ const defaultElement = `
       <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
       <input
         type="date"
-        name="grupno_datum_rodjenja[]"
+        name="grupni_datum_rodjenja[]"
         id="date-of-birth"
         class="forma__input"
         placeholder="20/11/1998"
@@ -124,7 +124,7 @@ const defaultElement = `
       <label class="forma__label" for="passport-number">Broj Pasosa</label>
       <input
         type="number"
-        name="grupno_broj_pasosa[]"
+        name="grupni_broj_pasosa[]"
         id="passport-number"
         class="forma__input"
         placeholder="0012371238719"

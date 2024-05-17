@@ -222,6 +222,7 @@
 
 <?php
 require('./database.php');
+
 function display()
 {
   styledVarDump($_POST);
@@ -232,6 +233,24 @@ define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
 define('REGEX_DATE', '/^\d{4}-\d{2}-\d{2}$/');
 define('REGEX_PASSPORT', '/^[0-9]+$/');
 
+function validate($param, $regexPattern)
+{
+  if (!preg_match($regexPattern, $param)) {
+    return false;
+  }
+  return true;
+}
+function displayErrorMessage($message = null)
+{
+  echo "
+  <div class='error'>
+    <div class='error__container'>
+      <button type='button' class='error__button' onclick='this.parentElement.parentElement.remove()'>&#10005</button>
+      <p class='error__message'>$message</p>
+    </div>
+  </div>
+  ";
+}
 
 function styledVarDump($var)
 {
@@ -287,6 +306,7 @@ function run($connection)
   $datum_putovanja_od = $_POST['datum_putovanja_od'] ?? '';
   $datum_putovanja_do = $_POST['datum_putovanja_do'] ?? '';
   $terms_and_conditions = $_POST['terms_and_conditions'] ?? '';
+  $vrsta_polise = isset($_POST['grupno_osiguranje']) && $_POST['grupno_osiguranje'] === 'on' ? 'grupno' : 'individualno';
 
   $errors = [];
 
@@ -311,23 +331,63 @@ function run($connection)
     displayErrorMessage(implode("<br>", $errors));
   } else {
 
-    if (!isset($_POST['vrsta_polise'])) {
+    $connection->beginTransaction();
 
-      $sql = "INSERT INTO osiguranje (ime_i_prezime, datum_rodjenja, broj_pasosa, telefon, email, datum_putovanja_od, datum_putovanja_do, vrsta_polise)
+    $sql = "INSERT INTO osiguranje (ime_i_prezime, datum_rodjenja, broj_pasosa, telefon, email, datum_putovanja_od, datum_putovanja_do, vrsta_polise)
       VALUES (:ime_i_prezime, :datum_rodjenja, :broj_pasosa, :telefon, :email, :datum_putovanja_od, :datum_putovanja_do, :vrsta_polise)";
-          $data = [
-            ':ime_i_prezime' => $ime_i_prezime,
-            ':datum_rodjenja' => $datum_rodjenja,
-            ':broj_pasosa' => $broj_pasosa,
-            ':telefon' => $telefon,
-            ':email' => $email,
-            ':datum_putovanja_od' => $datum_putovanja_od,
-            ':datum_putovanja_do' => $datum_putovanja_do,
-            ':vrsta_polise' => 'individualno',
-        ];
+    $data = [
+      ':ime_i_prezime' => $ime_i_prezime,
+      ':datum_rodjenja' => $datum_rodjenja,
+      ':broj_pasosa' => $broj_pasosa,
+      ':telefon' => $telefon,
+      ':email' => $email,
+      ':datum_putovanja_od' => $datum_putovanja_od,
+      ':datum_putovanja_do' => $datum_putovanja_do,
+      ':vrsta_polise' => $vrsta_polise,
+    ];
+    $statement = $connection->prepare($sql);
+    $statement->execute($data);
+    styledPrintR('i came HERE');
+    if ($vrsta_polise === 'grupno') {
+      $id = $connection->lastInsertId();
+      $sql = "INSERT INTO dodatni_osiguranici (osiguranje_id, ime_i_prezime, datum_rodjenja, broj_pasosa) VALUES (:osiguranje_id, :ime_i_prezime, :datum_rodjenja, :broj_pasosa)";
       $statement = $connection->prepare($sql);
-      $statement->execute($data);
+      // validacija podataka 
+
+      for ($i = 0; $i < count($_POST['grupno_ime_i_prezime']); $i++) {
+        $puno_ime = $_POST['grupno_ime_i_prezime'][$i];
+        if (!validate($puno_ime, REGEX_NAME)) {
+          $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+        }
+
+        $datum_rodjenja = $_POST['grupni_datum_rodjenja'][$i];
+        if (!validate($datum_rodjenja, REGEX_DATE)) {
+          $errors[] = "Netacan format datuma";
+        }
+
+        $broj_pasosa = $_POST['grupni_broj_pasosa'][$i];
+        if (!validate($broj_pasosa, REGEX_PASSPORT)) {
+          $errors[] = "Broj pasosa nije validan";
+        }
+      }
+      if (!empty($errors)) {
+        $connection->rollBack();
+        displayErrorMessage(implode("<br>", $errors));
+        return;
+      }
+
+      for ($i = 0; $i < count($_POST['grupno_ime_i_prezime']); $i++) {
+        $data = [
+          ':osiguranje_id' => $id,
+          ':ime_i_prezime' => $_POST['grupno_ime_i_prezime'][$i],
+          ':datum_rodjenja' => $_POST['grupni_datum_rodjenja'][$i],
+          ':broj_pasosa' => $_POST['grupni_broj_pasosa'][$i],
+        ];
+        $statement->execute($data);
+      }
     }
+    $connection->commit();
+
 
     echo "<script>
       function displaySuccessMessage(){
@@ -354,22 +414,3 @@ function run($connection)
 //   // styledPrintR([$is_adult,  $age]);
 //   return $is_adult;
 // }
-
-function validate($param, $regexPattern)
-{
-  if (!preg_match($regexPattern, $param)) {
-    return false;
-  }
-  return true;
-}
-function displayErrorMessage($message = null)
-{
-  echo "
-  <div class='error'>
-    <div class='error__container'>
-      <button type='button' class='error__button' onclick='this.parentElement.parentElement.remove()'>&#10005</button>
-      <p class='error__message'>$message</p>
-    </div>
-  </div>
-  ";
-}
