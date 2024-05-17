@@ -1,4 +1,3 @@
-<?php include('database.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,7 +69,7 @@
                 <div class="forma__additional-fields"></div>
               </div>
               <div class="forma__form-wrap">
-                <span class="forma__person" >Nosioc Osiguranja</span>
+                <span class="forma__person">Nosioc Osiguranja</span>
                 <div class="forma__group">
                   <label class="forma__label" for="full-name">Ime i Prezime</label>
                   <input type="text" name="ime_i_prezime" id="full-name" class="forma__input" placeholder="Petar Petrovic" required pattern="^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$">
@@ -92,17 +91,18 @@
                   <input type="email" name="email" id="email" class="forma__input" placeholder="petar.petrovic@gmail.com" required>
                 </div>
                 <div class="forma__group">
-                  <label class="forma__label" for="email">Datum Putovanja Od</label>
-                  <input type="date" name="email" id="email" class="forma__input forma__input--from" required>
+                  <label class="forma__label" for="datum-od">Datum Putovanja Od</label>
+                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required>
                 </div>
                 <div class="forma__group">
-                  <label class="forma__label" for="email">Datum Putovanja Do</label>
-                  <input type="date" name="email" id="email" class="forma__input forma__input--to" required>
+                  <label class="forma__label" for="datum-do">Datum Putovanja Do</label>
+                  <input type="date" name="datum_putovanja_do" id="datum-do" class="forma__input forma__input--to" required>
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="ukupno">Ukupno Dana <span class="forma__element">0</span></label>
                 </div>
-                <label class="forma__label forma__label--terms" for="checkbox"><input type="checkbox" name="checkbox" id="checkbox" class="forma__check">
+                <label class="forma__label forma__label--terms" for="terms_and_conditions">
+                  <input type="checkbox" name="terms_and_conditions" id="terms_and_conditions" class="forma__check" required>
                   <div class="forma__box"></div>
                   Prihvatam &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> uslove koriscenja</a>,&nbsp;
@@ -113,6 +113,9 @@
                 <button type="submit" class="btn forma__btn">
                   Posalji zahtev
                 </button>
+                <p class="forma__success">Uspesno poslati podaci
+                  <button type="button" class="forma__success-button" onclick="this.parentElement.style.display='none'">&#10005</button>
+                </p>
               </div>
             </div>
           </div>
@@ -218,13 +221,155 @@
 </html>
 
 <?php
-
-function display() {
-  echo "<pre>";
-  var_dump($_POST);
-  echo "</pre>";
+require('./database.php');
+function display()
+{
+  styledVarDump($_POST);
+  styledPrintR($_POST);
 }
 
-if(isset($_POST)){
+define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
+define('REGEX_DATE', '/^\d{4}-\d{2}-\d{2}$/');
+define('REGEX_PASSPORT', '/^[0-9]+$/');
+
+
+function styledVarDump($var)
+{
+  echo '<pre style="
+      background-color: #1d1d1d;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      color: #00ff40;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow: auto;
+      white-space: pre-wrap;
+  ">';
+  var_dump($var);
+  echo '</pre>';
+}
+function styledPrintR($var)
+{
+  echo '<pre style="
+      background-color: #1d1d1d;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      color: #00ff40;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow: auto;
+      white-space: pre-wrap;
+  ">';
+  $var =  json_encode($var, JSON_PRETTY_PRINT);
+  print_r($var);
+  echo '</pre>';
+}
+
+
+if (isset($_POST)) {
   display();
+  run($connection);
+}
+function run($connection)
+{
+  if ($_POST === []) {
+    var_dump($_POST);
+    return;
+  }
+
+  $ime_i_prezime = $_POST['ime_i_prezime'] ?? '';
+  $datum_rodjenja = $_POST['datum_rodjenja'] ?? '';
+  $broj_pasosa = $_POST['broj_pasosa'] ?? '';
+  $telefon = $_POST['telefon'] ?? '';
+  $email = $_POST['email'] ?? '';
+  $datum_putovanja_od = $_POST['datum_putovanja_od'] ?? '';
+  $datum_putovanja_do = $_POST['datum_putovanja_do'] ?? '';
+  $terms_and_conditions = $_POST['terms_and_conditions'] ?? '';
+
+  $errors = [];
+
+  //  $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+  //  $errors[] = "Netacan format datuma";
+  //  $errors[] = "Passport number must be a valid number.";
+
+
+  if (!validate($ime_i_prezime, REGEX_NAME)) {
+    $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+  }
+
+  if (!validate($datum_rodjenja, REGEX_DATE)) {
+    $errors[] = "Netacan format datuma";
+  }
+
+  if (!validate($broj_pasosa, REGEX_PASSPORT)) {
+    $errors[] = "Passport number must be a valid number.";
+  }
+
+  if (!empty($errors)) {
+    displayErrorMessage(implode("<br>", $errors));
+  } else {
+
+    if (!isset($_POST['vrsta_polise'])) {
+
+      $sql = "INSERT INTO osiguranje (ime_i_prezime, datum_rodjenja, broj_pasosa, telefon, email, datum_putovanja_od, datum_putovanja_do, vrsta_polise)
+      VALUES (:ime_i_prezime, :datum_rodjenja, :broj_pasosa, :telefon, :email, :datum_putovanja_od, :datum_putovanja_do, :vrsta_polise)";
+          $data = [
+            ':ime_i_prezime' => $ime_i_prezime,
+            ':datum_rodjenja' => $datum_rodjenja,
+            ':broj_pasosa' => $broj_pasosa,
+            ':telefon' => $telefon,
+            ':email' => $email,
+            ':datum_putovanja_od' => $datum_putovanja_od,
+            ':datum_putovanja_do' => $datum_putovanja_do,
+            ':vrsta_polise' => 'individualno',
+        ];
+      $statement = $connection->prepare($sql);
+      $statement->execute($data);
+    }
+
+    echo "<script>
+      function displaySuccessMessage(){
+        let messageBox = document.querySelector('.forma__success')
+        messageBox.style.display = 'block';
+        setTimeout(()=>{
+          messageBox.style.display = 'none';
+        },5000);
+      }
+      displaySuccessMessage();
+    </script>";
+  }
+}
+
+// function isAtLeast18YearsOld($dateOfBirth)
+// {
+//   $dob = new DateTime($dateOfBirth);
+//   $today = new DateTime();
+//   $age = $today->diff($dob)->y;
+//   $is_adult = $age >= 18;
+//   if (!$is_adult) {
+//     $errors[] = "Morate imati najmanje 18 godina da bi ste ispunili uslove za polisu osiguranja";
+//   }
+//   // styledPrintR([$is_adult,  $age]);
+//   return $is_adult;
+// }
+
+function validate($param, $regexPattern)
+{
+  if (!preg_match($regexPattern, $param)) {
+    return false;
+  }
+  return true;
+}
+function displayErrorMessage($message = null)
+{
+  echo "
+  <div class='error'>
+    <div class='error__container'>
+      <button type='button' class='error__button' onclick='this.parentElement.parentElement.remove()'>&#10005</button>
+      <p class='error__message'>$message</p>
+    </div>
+  </div>
+  ";
 }

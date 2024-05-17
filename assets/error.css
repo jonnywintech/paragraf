@@ -1,0 +1,40 @@
+.error {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  z-index: 11;
+  display: grid;
+  place-items: center;
+  line-height: 1.2em;
+}
+.error__container {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: red;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  z-index: 12;
+  color: var(--white);
+}
+
+.error__button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: var(--aboutPara);
+  transition: 0.3s ease;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.error__button:hover {
+  cursor: pointer;
+  color: var(--white);
+  transform: scale(1.1);
+}

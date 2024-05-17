@@ -54,6 +54,9 @@
 .forma__form-wrap {
   width: 50%;
   height: 100%;
+  border: 1px solid var(--almostBlack);
+  border-radius: 5px;
+  padding: 15px;
 }
 
 .forma__form {
@@ -76,6 +79,12 @@
   }
 }
 
+.forma__input::placeholder {
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--formGrey);
+}
+
 .forma__input {
   margin-bottom: 25px;
   padding-left: 20px;
@@ -86,7 +95,9 @@
   height: 58px;
   display: block;
   background-color: var(--whitish);
-  /* background-color:var(--whitish); */
+  color: var(--darkGrey);
+  font-weight: 600;
+  font-size: 18px;
   @media only screen and (min-width: 768px) and (max-width: 1024px) {
     max-width: 498px;
     height: 58px;
@@ -95,12 +106,6 @@
     padding-left: 15px;
     margin-bottom: 19px;
   }
-}
-
-.forma__input[placeholder] {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--formGrey);
 }
 
 .forma__input--message {
@@ -176,16 +181,15 @@
   display: block;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    width: 15px;
-    height: 15px;
-    padding-right: 15px;
-    
+input[type='date']::-webkit-calendar-picker-indicator {
+  width: 15px;
+  height: 15px;
+  padding-right: 15px;
 }
 
 .forma__element {
-    color: var(--orange);
-    font-weight: 800;
+  color: var(--orange);
+  font-weight: 800;
 }
 
 .forma__btn {
@@ -221,7 +225,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 700;
   color: var(--almostBlack);
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   gap: 10px;
 }
 
@@ -237,14 +241,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: start;
 }
 
-/* The switch - the box around the slider */
 .forma__switch-container {
   width: 51px;
   height: 31px;
   position: relative;
 }
 
-/* Hide default HTML checkbox */
 .forma__checkbox {
   opacity: 0;
   width: 0;
@@ -262,13 +264,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.2s ease-out;
 }
 
-/* The slider */
 .forma__slider {
   width: 27px;
   height: 27px;
   position: absolute;
-  left: calc(50% - 27px/2 - 10px);
-  top: calc(50% - 27px/2);
+  left: calc(50% - 27px / 2 - 10px);
+  top: calc(50% - 27px / 2);
   border-radius: 50%;
   background: var(--white);
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
@@ -281,8 +282,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .forma__checkbox:checked + .forma__switch .forma__slider {
-  left: calc(50% - 27px/2 + 10px);
-  top: calc(50% - 27px/2);
+  left: calc(50% - 27px / 2 + 10px);
+  top: calc(50% - 27px / 2);
 }
 
 .forma__wrapper {
@@ -314,4 +315,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .forma__btn--custom:hover {
   background-color: var(--lightBlueBtnHover);
+}
+
+.forma__success {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 350px;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: var(--brightGreen);
+  color: var(--white);
+}
+
+.forma__success-button {
+  color: var(--white);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  line-height: 1.2em;
+  transition: 0.3s ease;
+}
+
+.forma__success-button:hover {
+  cursor: pointer;
+  color: var(--orange);
 }
