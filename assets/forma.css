@@ -45,6 +45,10 @@
   @media only screen and (min-width: 120px) and (max-width: 1024px) {
     display: none;
   }
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 }
 
 .forma__form-wrap {
@@ -182,4 +186,132 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .forma__element {
     color: var(--orange);
     font-weight: 800;
+}
+
+.forma__btn {
+  padding: 15px 25px;
+  background-color: var(--orange);
+  border-radius: 5px;
+  color: var(--white);
+  transition: 0.3s ease;
+}
+
+.forma__btn:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.forma__btn:active {
+  transform: scale(0.95);
+}
+
+.forma__switch-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.forma__switch-title {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--almostBlack);
+  display: flex;
+  justify-content: center; 
+  gap: 10px;
+}
+
+.forma__switch-span {
+  width: 50%;
+}
+
+.forma__switch-span:nth-child(1) {
+  text-align: end;
+}
+
+.forma__switch-span:nth-child(2) {
+  text-align: start;
+}
+
+/* The switch - the box around the slider */
+.forma__switch-container {
+  width: 51px;
+  height: 31px;
+  position: relative;
+}
+
+/* Hide default HTML checkbox */
+.forma__checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.forma__switch {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: var(--formGrey);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+/* The slider */
+.forma__slider {
+  width: 27px;
+  height: 27px;
+  position: absolute;
+  left: calc(50% - 27px/2 - 10px);
+  top: calc(50% - 27px/2);
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+}
+
+.forma__checkbox:checked + .forma__switch {
+  background-color: var(--brightGreen);
+}
+
+.forma__checkbox:checked + .forma__switch .forma__slider {
+  left: calc(50% - 27px/2 + 10px);
+  top: calc(50% - 27px/2);
+}
+
+.forma__wrapper {
+  width: 100%;
+  padding: 10px 0 10px 20px;
+  border: 1px solid var(--lightGrey);
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.forma__additional-fields {
+  padding: 0 20px;
+  width: 100%;
+}
+
+.forma__person {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.forma__btn--close {
+  background-color: red;
+}
+
+.forma__btn--custom {
+  display: none;
+  background-color: var(--lightBlueBtn);
+}
+
+.forma__btn--custom:hover {
+  background-color: var(--lightBlueBtnHover);
 }
