@@ -8,7 +8,7 @@
         <nav class="header__nav">
           <ul class="header__list">
             <li class="header__item">
-              <a href="index.php" class="header__link">Forma</a>
+              <a href="/" class="header__link">Forma</a>
             </li>
             <li class="header__item">
               <a href="pregled-polisa.php" class="header__link">Pregled polisa</a>

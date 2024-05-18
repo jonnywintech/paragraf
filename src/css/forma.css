@@ -133,37 +133,18 @@
   color: var(--darkGrey);
   width: 100%;
   font-weight: 400;
+  color: var(--almostBlack);
   @media only screen and (min-width: 120px) and (max-width: 767px) {
     margin-right: 35px;
   }
 }
 
 .forma__check {
-  display: none;
-}
-
-.forma__box {
-  width: 19px;
-  height: 19px;
-  border: 1px solid var(--formGrey);
-  border-radius: 5px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.forma__box::after {
-  content: '\2713';
-  color: var(--whitish);
-  font-weight: 600;
-  font-size: 18px;
-}
-
-.forma__check:checked + .forma__box::after {
-  color: var(--orange);
-  transition: 0.3s ease;
+  transform: scale(1.4);
+  accent-color: var(--white);
+  /*
+  background-color: var(--orange);
+  border: 1px solid var(--orange); */
 }
 
 .forma__link {

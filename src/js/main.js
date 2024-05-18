@@ -1,6 +1,8 @@
+const dateOfBirth = document.querySelector('#date-of-birth');
 const dateFromInput = document.querySelector('.forma__input--from');
 const dateToInput = document.querySelector('.forma__input--to');
 const valueDisplay = document.querySelector('.forma__element');
+const mainForm = document.querySelector('.forma__form');
 
 function calculateDateDifference() {
   const dateFromValue = dateFromInput.value;
@@ -20,6 +22,33 @@ function calculateDateDifference() {
   }
 }
 
+/// validacija datuma
+mainForm.addEventListener('submit', (e) => {
+  const dateFromValue = new Date(dateFromInput.value).getTime();
+  const dateToValue = new Date(dateToInput.value).getTime();
+  const dateOfBirthValue = new Date(dateOfBirth.value).getTime();
+  const dateOfBirthInDays = Math.ceil(dateOfBirthValue / (1000 * 3600 * 24));
+  const today = new Date().getTime();
+
+  let formErrors = [];
+
+  if (dateFromValue < today || dateToValue < today) {
+
+    formErrors.push('Neispravan datum putovanja');
+
+  }
+  if ((today - dateOfBirthValue) < 568080000000 ) {
+
+    formErrors.push('Nemate 18 godina da bi ste popunili formu');
+  }
+  if(formErrors.length > 0){
+    e.preventDefault();
+    const div = document.createElement('div');
+    let message = formErrors.join('<br>');
+    div.innerHTML = dateErrorPopUp(message);
+    mainForm.append(div);
+  }
+});
 
 dateFromInput.addEventListener('input', calculateDateDifference);
 dateToInput.addEventListener('input', calculateDateDifference);
@@ -41,7 +70,8 @@ additionalUsersSwitch.addEventListener('change', (e) => {
     containerWithImage.style.backgroundImage = '';
   } else {
     addUsersButton.style.display = 'none';
-    containerWithImage.style.backgroundImage = "url('assets/contact-bg.png')";
+    containerWithImage.style.backgroundImage =
+      "url('src/images/contact-bg.png')";
     folderToInject.innerHTML = '';
     personCounter = 1;
   }
@@ -89,7 +119,7 @@ const additionalInputElement = (counter) => {
         class="forma__input"
         placeholder="0012371238719"
         required
-        pattern="/^[0-9]+$/" />
+        pattern="/^\\d{9}$/" />
     </div>
     <button class="btn forma__btn forma__btn--close" onclick="this.parentElement.remove()">Ukloni</button>
   `;
@@ -129,6 +159,17 @@ const defaultElement = `
         class="forma__input"
         placeholder="0012371238719"
         required
-        pattern="/^[0-9]+$/" />
+        pattern="/^\\d{9}$/" />
     </div>
-</div>`
+</div>`;
+
+const dateErrorPopUp = (message) => {
+  return `
+  <div class='error'>
+      <div class='error__container'>
+        <button type='button' class='error__button' onclick='this.parentElement.parentElement.remove()'>&#10005</button>
+        <p class='error__message'>${message}</p>
+      </div>
+    </div>
+    `;
+};

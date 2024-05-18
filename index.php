@@ -53,22 +53,21 @@
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="email">Email</label>
-                  <input type="email" name="email" id="email" class="forma__input" placeholder="petar.petrovic@gmail.com" required>
+                  <input type="email" name="email" id="email" class="forma__input" placeholder="petar.petrovic@gmail.com" required pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-od">Datum Putovanja Od</label>
-                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required>
+                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-do">Datum Putovanja Do</label>
-                  <input type="date" name="datum_putovanja_do" id="datum-do" class="forma__input forma__input--to" required>
+                  <input type="date" name="datum_putovanja_do" id="datum-do" class="forma__input forma__input--to" required pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="ukupno">Ukupno Dana <span class="forma__element">0</span></label>
                 </div>
                 <label class="forma__label forma__label--terms" for="terms_and_conditions">
                   <input type="checkbox" name="terms_and_conditions" id="terms_and_conditions" class="forma__check" required>
-                  <div class="forma__box"></div>
                   Prihvatam &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> uslove koriscenja</a>,&nbsp;
                   <a href="javscript:void(0)" class="forma__link">
@@ -103,11 +102,6 @@
 <?php
 require('./database.php');
 
-function display()
-{
-  styledVarDump($_POST);
-  styledPrintR($_POST);
-}
 
 define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
 define('REGEX_DATE', '/^\d{4}-\d{2}-\d{2}$/');
@@ -156,11 +150,6 @@ function run($connection)
   }
 
 
-  //  $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
-  //  $errors[] = "Netacan format datuma";
-  //  $errors[] = "Passport number must be a valid number.";
-
-
   if (!validate($ime_i_prezime, REGEX_NAME)) {
     $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
   }
@@ -169,8 +158,12 @@ function run($connection)
     $errors[] = "Netacan format datuma";
   }
 
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = "Neispravan format email-a";
+  }
+
   if (!validate($broj_pasosa, REGEX_PASSPORT)) {
-    $errors[] = "Passport number must be a valid number.";
+    $errors[] = "Neispravan broj pasosa.";
   }
 
   if (!empty($errors)) {
