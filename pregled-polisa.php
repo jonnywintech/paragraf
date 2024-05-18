@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pregled Polisa</title>
-    <link rel="stylesheet" href="./pregled-polisa.css">
+    <link rel="stylesheet" href="./src/css/pregled-polisa.css">
 </head>
 
 <body>
@@ -29,19 +29,9 @@
     }
 
 
-    require('./header.php');
     require('./database.php');
 
-    $sql = "SELECT polise.*, dodatni_osiguranici.polisa_id as osiguranici_id 
-            FROM polise 
-            LEFT JOIN dodatni_osiguranici ON polise.id = dodatni_osiguranici.polisa_id
-            GROUP BY polise.id
-            ORDER BY polise.created_at ASC";
-
-    $statement = $connection->prepare($sql);
-    $statement->execute();
-
-    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    require('./src/partials/header.php');
 
 
     if (isset($_GET['id'])) {
@@ -57,11 +47,20 @@
         $nosioc = $connection->prepare($sqlNosioc);
         $nosioc->execute();
         $nosioc = $nosioc->fetchAll(PDO::FETCH_ASSOC);
+    }else {
+        $sql = "SELECT * FROM polise
+            ORDER BY polise.created_at DESC";
+
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+
+    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // display funkcije
     function printRowNosioc($single_data)
     {
+        $id = $single_data['id'] ?? "";
         $date = $single_data['created_at'];
         $ime_i_prezime = $single_data['ime_i_prezime'];
         $datum_rodjenja = $single_data['datum_rodjenja'];
@@ -71,7 +70,6 @@
         $datum_putovanja_do = $single_data['datum_putovanja_do'];
         $broj_dana = $single_data['broj_dana'];
         $tip = ucfirst($single_data['vrsta_polise']);
-        $id = $single_data['osiguranici_id'] ?? "";
         echo "
             <tr class='tb__row' onclick=" . "this.classList.toggle('tb__row--active')" . ">
             <td class='tb__data'>$date</td>
@@ -112,8 +110,6 @@
         </tr>
             ";
     }
-
-
 
     ?>
     <main>
@@ -189,7 +185,7 @@
     </main>
 
 
-    <?php require('./footer.php');
+    <?php require('./src/partials/footer.php');
     ?>
 
 </body>

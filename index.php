@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paragraf Lex</title>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="./src/css/main.css">
 </head>
 
 <body>
   <?php
-  require('./header.php');
+  require('./src/partials/header.php');
   ?>
   <main>
     <!-- form start -->
@@ -20,7 +20,7 @@
           <div class="forma__container">
             <h2 class="forma__headline">Polisa Osiguranja</h2>
             <div class="forma__header">
-              <div class="forma__image has-cover" style="background-image: url('assets/contact-bg.png')">
+              <div class="forma__image has-cover" style="background-image: url('./src/images/contact-bg.png')">
                 <div class="forma__switch-wrapper">
                   <p class="forma__switch-title"><span class="forma__switch-span">Individualno</span> | <span class="forma__switch-span">Grupno osiguranje</span></p>
                   <div class="forma__switch-container">
@@ -91,11 +91,11 @@
   </main>
 
   <?php
-  require('./footer.php');
+  require('./src/partials/footer.php');
   ?>
 
   <!-- js scripts -->
-  <script src="main.js" type="module"></script>
+  <script src="./src/js/main.js" type="module"></script>
 </body>
 
 </html>
@@ -132,45 +132,7 @@ function displayErrorMessage($message = null)
   ";
 }
 
-function styledVarDump($var)
-{
-  echo '<pre style="
-      background-color: #1d1d1d;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 10px;
-      color: #00ff40;
-      font-size: 14px;
-      line-height: 1.5;
-      overflow: auto;
-      white-space: pre-wrap;
-  ">';
-  var_dump($var);
-  echo '</pre>';
-}
-function styledPrintR($var)
-{
-  echo '<pre style="
-      background-color: #1d1d1d;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 10px;
-      color: #00ff40;
-      font-size: 14px;
-      line-height: 1.5;
-      overflow: auto;
-      white-space: pre-wrap;
-  ">';
-  $var =  json_encode($var, JSON_PRETTY_PRINT);
-  print_r($var);
-  echo '</pre>';
-}
-
-
-if (isset($_POST)) {
-  // display();
-  run($connection);
-}
+run($connection);
 function run($connection)
 {
   if ($_POST === []) {
@@ -231,7 +193,6 @@ function run($connection)
     ];
     $statement = $connection->prepare($sql);
     $statement->execute($data);
-    styledPrintR('i came HERE');
     if ($vrsta_polise === 'grupno') {
       $id = $connection->lastInsertId();
       $sql = "INSERT INTO dodatni_osiguranici (polisa_id, ime_i_prezime, datum_rodjenja, broj_pasosa) VALUES (:polisa_id, :ime_i_prezime, :datum_rodjenja, :broj_pasosa)";
@@ -272,7 +233,6 @@ function run($connection)
     }
     $connection->commit();
 
-
     echo "<script>
       function displaySuccessMessage(){
         let messageBox = document.querySelector('.forma__success')
@@ -286,15 +246,3 @@ function run($connection)
   }
 }
 
-// function isAtLeast18YearsOld($dateOfBirth)
-// {
-//   $dob = new DateTime($dateOfBirth);
-//   $today = new DateTime();
-//   $age = $today->diff($dob)->y;
-//   $is_adult = $age >= 18;
-//   if (!$is_adult) {
-//     $errors[] = "Morate imati najmanje 18 godina da bi ste ispunili uslove za polisu osiguranja";
-//   }
-//   // styledPrintR([$is_adult,  $age]);
-//   return $is_adult;
-// }

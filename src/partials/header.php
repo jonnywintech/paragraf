@@ -3,7 +3,7 @@
     <div class="wrap">
       <div class="header__container">
         <a href="javascript:void(0)" class="header__logo">
-          <img class="header__image" src="assets/header-logo.png" alt="company logo">
+          <img class="header__image" src="./src/images/header-logo.png" alt="company logo">
         </a>
         <nav class="header__nav">
           <ul class="header__list">

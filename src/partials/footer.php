@@ -4,7 +4,7 @@
       <div class="wrap">
         <div class="footer__container">
           <div class="footer__col footer__col--grow">
-            <a href="javascript:void(0)" class="footer__link footer__link--logo"><img class="footer__logo" src="assets/footer-logo.png" alt="company name"></a>
+            <a href="javascript:void(0)" class="footer__link footer__link--logo"><img class="footer__logo" src="./src/images/footer-logo.png" alt="company name"></a>
             <p class="footer__text">Industry-leading insurance app</p>
             <p class="footer__text">
               Aliquam viverra non risus eget auctor.<br>
