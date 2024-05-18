@@ -1,0 +1,83 @@
+.tb {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: 120px 0 40px 0;
+  background-color: var(--whitish);
+}
+
+.tb__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tb__title {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.2em;
+  padding: 0 0 20px 0;
+  color: var(--almostBlack);
+}
+
+.tb__start {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.tb__head {
+  .tb__row {
+    background-color: var(--mediumGb);
+    color: var(--white);
+    text-align: left;
+    font-weight: 600;
+  }
+}
+.tb__head-data,
+.tb__data {
+  padding: 12px 15px;
+}
+
+.tb__data {
+  border-bottom: 1px solid var(--greyBallon);
+}
+
+.tb__row:nth-of-type(even) {
+  background-color: var(--tableEven);
+}
+
+.tb__row:last-of-type {
+  border-bottom: 2px solid var(--tableBorder);
+}
+
+.tb__row--active {
+  font-weight: 600;
+  color: var(--white);
+  background-color: var(--lightGb) !important;
+}
+
+.tb__button {
+  text-decoration: none;
+  padding: 15px 25px;
+  color: var(--white);
+  background-color: var(--lightBlueBtn);
+  transition: 0.3s ease;
+  border-radius: 5px;
+}
+
+.tb__button:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  background-color: var(--lightBlueBtnHover);
+}
+
+.tb__button:active {
+  transform: scale(0.95);
+}

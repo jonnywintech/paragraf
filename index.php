@@ -9,44 +9,9 @@
 </head>
 
 <body>
-  <!-- header start  -->
-  <header class="header">
-    <div class="wrap">
-      <div class="header__container">
-        <a href="javascript:void(0)" class="header__logo">
-          <img class="header__image" src="assets/header-logo.png" alt="company logo">
-        </a>
-        <nav class="header__nav">
-          <ul class="header__list">
-            <li class="header__item">
-              <a href="index.php" class="header__link">Forma</a>
-            </li>
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">Pregled polisa</a>
-            </li>
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">O Nama</a>
-            </li>
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">Kontakt</a>
-            </li>
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">Pomoc</a>
-            </li>
-          </ul>
-          <ul class="header__list">
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">Registruj se</a>
-            </li>
-            <li class="header__item">
-              <a href="javascript:void(0)" class="header__link">Uloguj se</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
-  <!-- header end  -->
+  <?php
+  require('./header.php');
+  ?>
   <main>
     <!-- form start -->
     <section class="forma">
@@ -80,7 +45,7 @@
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="passport-number">Broj Pasosa</label>
-                  <input type="number" name="broj_pasosa" id="passport-number" class="forma__input" placeholder="0012371238719" required pattern="/^[0-9]+$/">
+                  <input type="number" name="broj_pasosa" id="passport-number" class="forma__input" placeholder="023456789" required pattern="/^\d{9}$/" title="Broj Pasosa mora imati 9 karaktera">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="phone">Broj Telefona</label>
@@ -125,94 +90,9 @@
     <!-- form end -->
   </main>
 
-  <!-- footer start  -->
-  <footer class="footer">
-    <div class="footer__top">
-      <div class="wrap">
-        <div class="footer__container">
-          <div class="footer__col footer__col--grow">
-            <a href="javascript:void(0)" class="footer__link footer__link--logo"><img class="footer__logo" src="assets/footer-logo.png" alt="company name"></a>
-            <p class="footer__text">Industry-leading insurance app</p>
-            <p class="footer__text">
-              Aliquam viverra non risus eget auctor.<br>
-              Praesent tincidunt nunc quis tellus congue
-            </p>
-            <p class="footer__text">
-              Made in Pozarevac,<br>
-              Serbia, SRB
-            </p>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__title">features</h4>
-            <ul class="footer__list">
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Analytics</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Activity</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Content management</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Publishing</a>
-              </li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__title">about</h4>
-            <ul class="footer__list">
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Blog</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Pricing</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">FAQ</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Product Changes</a>
-              </li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__title">free tools</h4>
-            <ul class="footer__list">
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Instagram Audit</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Instagram Brands Index</a>
-              </li>
-              <li class="footer__item">
-                <a href="javascript:void(0)" class="footer__link">Instagram Influencer Index</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <div class="wrap">
-        <div class="footer__holder">
-          <span class="footer__copyright">© Company Name All rights reserved.</span>
-          <ul class="footer__social">
-            <li class="footer__social-item">
-              <a href="javascript:void(0)" class="footer__social-link"><span class="icon icon-twitter"></span></a>
-            </li>
-            <li class="footer__social-item">
-              <a href="javascript:void(0)" class="footer__social-link"><span class="icon icon-instagram"></span></a>
-            </li>
-            <li class="footer__social-item">
-              <a href="javascript:void(0)" class="footer__social-link"><span class="icon icon-facebook"></span></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- footer end  -->
+  <?php
+  require('./footer.php');
+  ?>
 
   <!-- js scripts -->
   <script src="main.js" type="module"></script>
@@ -231,7 +111,7 @@ function display()
 
 define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
 define('REGEX_DATE', '/^\d{4}-\d{2}-\d{2}$/');
-define('REGEX_PASSPORT', '/^[0-9]+$/');
+define('REGEX_PASSPORT', '/^\d{9}$/');
 
 function validate($param, $regexPattern)
 {
@@ -288,15 +168,15 @@ function styledPrintR($var)
 
 
 if (isset($_POST)) {
-  display();
+  // display();
   run($connection);
 }
 function run($connection)
 {
   if ($_POST === []) {
-    var_dump($_POST);
     return;
   }
+  $errors = [];
 
   $ime_i_prezime = $_POST['ime_i_prezime'] ?? '';
   $datum_rodjenja = $_POST['datum_rodjenja'] ?? '';
@@ -305,10 +185,14 @@ function run($connection)
   $email = $_POST['email'] ?? '';
   $datum_putovanja_od = $_POST['datum_putovanja_od'] ?? '';
   $datum_putovanja_do = $_POST['datum_putovanja_do'] ?? '';
-  $terms_and_conditions = $_POST['terms_and_conditions'] ?? '';
   $vrsta_polise = isset($_POST['grupno_osiguranje']) && $_POST['grupno_osiguranje'] === 'on' ? 'grupno' : 'individualno';
 
-  $errors = [];
+  if (!isset($_POST['terms_and_conditions']) && !$_POST['terms_and_conditions'] === 'on') {
+    $errors = 'Morate prihvatiti uslove koriscenja';
+    displayErrorMessage($errors);
+    return;
+  }
+
 
   //  $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
   //  $errors[] = "Netacan format datuma";
@@ -333,7 +217,7 @@ function run($connection)
 
     $connection->beginTransaction();
 
-    $sql = "INSERT INTO osiguranje (ime_i_prezime, datum_rodjenja, broj_pasosa, telefon, email, datum_putovanja_od, datum_putovanja_do, vrsta_polise)
+    $sql = "INSERT INTO polise (ime_i_prezime, datum_rodjenja, broj_pasosa, telefon, email, datum_putovanja_od, datum_putovanja_do, vrsta_polise)
       VALUES (:ime_i_prezime, :datum_rodjenja, :broj_pasosa, :telefon, :email, :datum_putovanja_od, :datum_putovanja_do, :vrsta_polise)";
     $data = [
       ':ime_i_prezime' => $ime_i_prezime,
@@ -350,7 +234,7 @@ function run($connection)
     styledPrintR('i came HERE');
     if ($vrsta_polise === 'grupno') {
       $id = $connection->lastInsertId();
-      $sql = "INSERT INTO dodatni_osiguranici (osiguranje_id, ime_i_prezime, datum_rodjenja, broj_pasosa) VALUES (:osiguranje_id, :ime_i_prezime, :datum_rodjenja, :broj_pasosa)";
+      $sql = "INSERT INTO dodatni_osiguranici (polisa_id, ime_i_prezime, datum_rodjenja, broj_pasosa) VALUES (:polisa_id, :ime_i_prezime, :datum_rodjenja, :broj_pasosa)";
       $statement = $connection->prepare($sql);
       // validacija podataka 
 
@@ -378,7 +262,7 @@ function run($connection)
 
       for ($i = 0; $i < count($_POST['grupno_ime_i_prezime']); $i++) {
         $data = [
-          ':osiguranje_id' => $id,
+          ':polisa_id' => $id,
           ':ime_i_prezime' => $_POST['grupno_ime_i_prezime'][$i],
           ':datum_rodjenja' => $_POST['grupni_datum_rodjenja'][$i],
           ':broj_pasosa' => $_POST['grupni_broj_pasosa'][$i],

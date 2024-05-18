@@ -35,13 +35,13 @@
 
 .header__item {
   display: inline-block;
-  padding: 0 15px;
   margin: 0 auto;
   width: fit-content;
   height: 81px;
   text-align: center;
   transition: 0.3s ease;
   border-bottom: 3px solid transparent;
+  display: flex;
 }
 
 .header__item:hover {
@@ -59,4 +59,7 @@
   text-decoration: none;
   color: var(--almostBlack);
   font-weight: bold;
+  width: 100%;
+  height: 100%;
+  padding: 0 15px;
 }

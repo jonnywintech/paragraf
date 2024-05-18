@@ -50,6 +50,8 @@ html {
   --lightBlueBtn: #87c5ec;
   --lightBlueBtnHover: #4a7abc;
   --brightGreen: #34C759;
+  --tableEven: #cecbcb;
+  --tableBorder: #a3a3a3;
 }
 
 .wrap {

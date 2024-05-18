@@ -21,8 +21,8 @@ function calculateDateDifference() {
 }
 
 
-dateFromInput.addEventListener('change', calculateDateDifference);
-dateToInput.addEventListener('change', calculateDateDifference);
+dateFromInput.addEventListener('input', calculateDateDifference);
+dateToInput.addEventListener('input', calculateDateDifference);
 
 //// polisa dodatni korisnici
 
