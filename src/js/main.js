@@ -28,9 +28,11 @@ mainForm.addEventListener('submit', (e) => {
   const dateToValue = new Date(dateToInput.value).getTime();
   const dateOfBirthValue = new Date(dateOfBirth.value).getTime();
   const dateOfBirthInDays = Math.ceil(dateOfBirthValue / (1000 * 3600 * 24));
-  const today = new Date().getTime();
+  let today = new Date().toISOString().split('T')[0];
+  today = new Date(today).getTime() - 1;
 
   let formErrors = [];
+
 
   if (dateFromValue < today || dateToValue < today) {
 

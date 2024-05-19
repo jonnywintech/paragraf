@@ -57,7 +57,7 @@
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-od">Datum Putovanja Od</label>
-                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="pattern="\d{4}-\d{2}-\d{2}">
+                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="pattern=" \d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-do">Datum Putovanja Do</label>
@@ -149,21 +149,59 @@ function run($connection)
     return;
   }
 
+  function isAdult($date_of_birth)
+  {
+    $date_of_birth = new DateTime($date_of_birth);
+    $current_date = new DateTime(date("Y-m-d"));
+    $years_old = $current_date->diff($date_of_birth);
+    return $years_old->y >= 18;
+  }
+
+
+
+  function isDateInFuture($datum)
+  {
+    $trenutni_datum = new DateTime(date("Y-m-d"));
+    $timestamp = $trenutni_datum->getTimestamp() - 1;
+    $datum_forme = strtotime($datum);
+    return $datum_forme > $timestamp;
+  }
+
 
   if (!validate($ime_i_prezime, REGEX_NAME)) {
-    $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+    $errors[] = "BE Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
   }
 
   if (!validate($datum_rodjenja, REGEX_DATE)) {
-    $errors[] = "Netacan format datuma";
+    $errors[] = "BE Netacan format datuma";
+  }
+
+  if (!isAdult($datum_rodjenja)) {
+    $errors[] = "BE Nemate 18 godina da bi ste popunili formu";
   }
 
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors[] = "Neispravan format email-a";
+    $errors[] = "BE Neispravan format email-a";
   }
 
   if (!validate($broj_pasosa, REGEX_PASSPORT)) {
-    $errors[] = "Neispravan broj pasosa.";
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!validate($datum_putovanja_od, REGEX_DATE)) {
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!isDateInFuture($datum_putovanja_od)) {
+    $errors[] = "BE Datum putovanja od mora biti u buducnosti";
+  }
+
+  if (!validate($datum_putovanja_do, REGEX_DATE)) {
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!isDateInFuture($datum_putovanja_do)) {
+    $errors[] = "BE Datum putovanja do mora biti u buducnosti";
   }
 
   if (!empty($errors)) {
@@ -195,17 +233,21 @@ function run($connection)
       for ($i = 0; $i < count($_POST['grupno_ime_i_prezime']); $i++) {
         $puno_ime = $_POST['grupno_ime_i_prezime'][$i];
         if (!validate($puno_ime, REGEX_NAME)) {
-          $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+          $errors[] = "BE Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
         }
 
         $datum_rodjenja = $_POST['grupni_datum_rodjenja'][$i];
         if (!validate($datum_rodjenja, REGEX_DATE)) {
-          $errors[] = "Netacan format datuma";
+          $errors[] = "BE Netacan format datuma";
+        }
+
+        if (isDateInFuture($datum_rodjenja)) {
+          $errors[] = "BE Datum rodjenja nemoze biti u buducnosti";
         }
 
         $broj_pasosa = $_POST['grupni_broj_pasosa'][$i];
         if (!validate($broj_pasosa, REGEX_PASSPORT)) {
-          $errors[] = "Broj pasosa nije validan";
+          $errors[] = "BE Broj pasosa nije validan";
         }
       }
       if (!empty($errors)) {
@@ -225,7 +267,6 @@ function run($connection)
       }
     }
     $connection->commit();
-
     echo "<script>
       function displaySuccessMessage(){
         let messageBox = document.querySelector('.forma__success')
@@ -236,6 +277,7 @@ function run($connection)
       }
       displaySuccessMessage();
     </script>";
+
+    header('Location: /');
   }
 }
-

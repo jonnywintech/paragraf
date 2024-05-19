@@ -10,7 +10,7 @@ function connectToDatabase($servername, $username, $password, $dbname) {
         return $connection;
     } catch (PDOException $e) {
         echo $e->getMessage();
-        return null;
+        return;
     }
 }
 
