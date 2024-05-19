@@ -8,10 +8,14 @@
 
 .tb__container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+}
+
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+ .tb__container {
+   overflow-y: scroll;
+   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  }
 }
 
 .tb__title {
@@ -20,6 +24,7 @@
   line-height: 1.2em;
   padding: 0 0 20px 0;
   color: var(--almostBlack);
+  text-align: center;
 }
 
 .tb__start {
@@ -30,6 +35,7 @@
   border-radius: 5px 5px 0 0;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  height: fit-content;
 }
 
 .tb__head {
@@ -40,6 +46,13 @@
     font-weight: 600;
   }
 }
+
+.tb__head-data {
+    position: sticky;
+    top: 0;
+    background-color: inherit;
+}
+
 .tb__head-data,
 .tb__data {
   padding: 12px 15px;
