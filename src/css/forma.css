@@ -142,9 +142,7 @@
 .forma__check {
   transform: scale(1.4);
   accent-color: var(--white);
-  /*
-  background-color: var(--orange);
-  border: 1px solid var(--orange); */
+  margin-right: 8px;
 }
 
 .forma__link {

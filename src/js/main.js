@@ -27,28 +27,37 @@ mainForm.addEventListener('submit', (e) => {
   const dateFromValue = new Date(dateFromInput.value).getTime();
   const dateToValue = new Date(dateToInput.value).getTime();
   const dateOfBirthValue = new Date(dateOfBirth.value).getTime();
-  const dateOfBirthInDays = Math.ceil(dateOfBirthValue / (1000 * 3600 * 24));
+  const eighteenInMs = 568080000000;
   let today = new Date().toISOString().split('T')[0];
   today = new Date(today).getTime() - 1;
 
   let formErrors = [];
 
+  const passports = document.querySelectorAll('.forma__input--passport');
 
-  if (dateFromValue < today || dateToValue < today) {
-
+  const passportRegex = /^\d{9}$/;
+  passports.forEach((passport) => {
+    if (!passportRegex.test(passport.value)) {
+      formErrors.push('Broj pasosa nije validan');
+    }
+  });
+  if (dateFromValue < today) {
     formErrors.push('Neispravan datum putovanja');
-
   }
-  if ((today - dateOfBirthValue) < 568080000000 ) {
-
+  if (dateToValue < today) {
+    formErrors.push('Neispravan datum putovanja');
+  }
+  if (today - dateOfBirthValue < eighteenInMs) {
     formErrors.push('Nemate 18 godina da bi ste popunili formu');
   }
-  if(formErrors.length > 0){
-    e.preventDefault();
+
+  if (formErrors.length > 0) {
     const div = document.createElement('div');
     let message = formErrors.join('<br>');
-    div.innerHTML = dateErrorPopUp(message);
+    div.innerHTML = errorPopUp(message);
     mainForm.append(div);
+    formErrors = [];
+    e.preventDefault();
   }
 });
 
@@ -99,7 +108,7 @@ const additionalInputElement = (counter) => {
         class="forma__input"
         placeholder="Petar Petrovic"
         required
-        pattern="^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$" />
+        pattern="^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$" />
     </div>
     <div class="forma__group">
       <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
@@ -118,10 +127,10 @@ const additionalInputElement = (counter) => {
         type="number"
         name="grupni_broj_pasosa[]"
         id="passport-number"
-        class="forma__input"
+        class="forma__input forma__input--passport"
         placeholder="0012371238719"
         required
-        pattern="/^\\d{9}$/" />
+        pattern="[0-9]{9}" max=999999999 title="Broj Pasosa mora imati 9 karaktera"/>
     </div>
     <button class="btn forma__btn forma__btn--close" onclick="this.parentElement.remove()">Ukloni</button>
   `;
@@ -139,7 +148,7 @@ const defaultElement = `
         class="forma__input"
         placeholder="Petar Petrovic"
         required
-        pattern="^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$" />
+        pattern="^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$" />
     </div>
     <div class="forma__group">
       <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
@@ -158,14 +167,14 @@ const defaultElement = `
         type="number"
         name="grupni_broj_pasosa[]"
         id="passport-number"
-        class="forma__input"
+        class="forma__input forma__input--passport"
         placeholder="0012371238719"
         required
-        pattern="/^\\d{9}$/" />
+        pattern="[0-9]{9}" max=999999999 title="Broj Pasosa mora imati 9 karaktera" />
     </div>
 </div>`;
 
-const dateErrorPopUp = (message) => {
+const errorPopUp = (message) => {
   return `
   <div class='error'>
       <div class='error__container'>

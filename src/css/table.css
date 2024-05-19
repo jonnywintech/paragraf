@@ -81,3 +81,21 @@
 .tb__button:active {
   transform: scale(0.95);
 }
+
+.tb__btn {
+  text-decoration: none;
+  padding: 10px 15px;
+  color: var(--white);
+  background-color: var(--mediumGb);
+  transition: 0.3s  ease;
+}
+
+.tb__btn:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  background-color: var(--darkGb);
+}
+
+.tb__btn:active {
+  transform: scale(0.95);
+}

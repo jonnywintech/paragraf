@@ -37,15 +37,15 @@
                 <span class="forma__person">Nosioc Osiguranja</span>
                 <div class="forma__group">
                   <label class="forma__label" for="full-name">Ime i Prezime</label>
-                  <input type="text" name="ime_i_prezime" id="full-name" class="forma__input" placeholder="Petar Petrovic" required pattern="^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$">
+                  <input type="text" name="ime_i_prezime" id="full-name" class="forma__input" placeholder="Petar Petrovic" required pattern="^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
                   <input type="date" name="datum_rodjenja" id="date-of-birth" class="forma__input" placeholder="20/11/1998" required pattern="/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$/">
                 </div>
                 <div class="forma__group">
-                  <label class="forma__label" for="passport-number">Broj Pasosa</label>
-                  <input type="number" name="broj_pasosa" id="passport-number" class="forma__input" placeholder="023456789" required pattern="/^\d{9}$/" title="Broj Pasosa mora imati 9 karaktera">
+                  <label class="forma__label" for="passport-number" title="Broj Pasosa mora imati 9 karaktera">Broj Pasosa</label>
+                  <input type="string" name="broj_pasosa" id="passport-number" class="forma__input forma__input--passport" placeholder="023456789" required pattern="[0-9]{9}" max=999999999 title="Broj Pasosa mora imati 9 karaktera">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="phone">Broj Telefona</label>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-od">Datum Putovanja Od</label>
-                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="pattern=" \d{4}-\d{2}-\d{2}">
+                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-do">Datum Putovanja Do</label>
@@ -71,7 +71,7 @@
                   Prihvatam &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> uslove koriscenja</a>,&nbsp;
                   <a href="javscript:void(0)" class="forma__link">
-                    Privatnos</a>&nbsp; Politika i &nbsp;
+                    Privatnost</a>&nbsp; Politika i &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> naknade</a>.
                 </label>
                 <button type="submit" class="btn forma__btn">
@@ -253,6 +253,7 @@ function run($connection)
       if (!empty($errors)) {
         $connection->rollBack();
         displayErrorMessage(implode("<br>", $errors));
+        $_POST = [];
         return;
       }
 
@@ -278,6 +279,5 @@ function run($connection)
       displaySuccessMessage();
     </script>";
 
-    header('Location: /');
   }
 }
