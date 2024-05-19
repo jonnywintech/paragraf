@@ -101,6 +101,8 @@
 
 <?php
 require('./database.php');
+// require('./database-sql.php');
+
 
 
 define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
