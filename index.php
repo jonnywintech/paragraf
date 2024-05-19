@@ -37,15 +37,15 @@
                 <span class="forma__person">Nosioc Osiguranja</span>
                 <div class="forma__group">
                   <label class="forma__label" for="full-name">Ime i Prezime</label>
-                  <input type="text" name="ime_i_prezime" id="full-name" class="forma__input" placeholder="Petar Petrovic" required pattern="^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$">
+                  <input type="text" name="ime_i_prezime" id="full-name" class="forma__input" placeholder="Petar Petrovic" required pattern="^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="date-of-birth">Datum Rodjenja</label>
                   <input type="date" name="datum_rodjenja" id="date-of-birth" class="forma__input" placeholder="20/11/1998" required pattern="/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$/">
                 </div>
                 <div class="forma__group">
-                  <label class="forma__label" for="passport-number">Broj Pasosa</label>
-                  <input type="number" name="broj_pasosa" id="passport-number" class="forma__input" placeholder="023456789" required pattern="/^\d{9}$/" title="Broj Pasosa mora imati 9 karaktera">
+                  <label class="forma__label" for="passport-number" title="Broj Pasosa mora imati 9 karaktera">Broj Pasosa</label>
+                  <input type="string" name="broj_pasosa" id="passport-number" class="forma__input forma__input--passport" placeholder="023456789" required pattern="[0-9]{9}" max=999999999 title="Broj Pasosa mora imati 9 karaktera">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="phone">Broj Telefona</label>
@@ -53,26 +53,25 @@
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="email">Email</label>
-                  <input type="email" name="email" id="email" class="forma__input" placeholder="petar.petrovic@gmail.com" required>
+                  <input type="email" name="email" id="email" class="forma__input" placeholder="petar.petrovic@gmail.com" required pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-od">Datum Putovanja Od</label>
-                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required>
+                  <input type="date" name="datum_putovanja_od" id="datum-od" class="forma__input forma__input--from" required pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="datum-do">Datum Putovanja Do</label>
-                  <input type="date" name="datum_putovanja_do" id="datum-do" class="forma__input forma__input--to" required>
+                  <input type="date" name="datum_putovanja_do" id="datum-do" class="forma__input forma__input--to" required pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="forma__group">
                   <label class="forma__label" for="ukupno">Ukupno Dana <span class="forma__element">0</span></label>
                 </div>
                 <label class="forma__label forma__label--terms" for="terms_and_conditions">
                   <input type="checkbox" name="terms_and_conditions" id="terms_and_conditions" class="forma__check" required>
-                  <div class="forma__box"></div>
                   Prihvatam &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> uslove koriscenja</a>,&nbsp;
                   <a href="javscript:void(0)" class="forma__link">
-                    Privatnos</a>&nbsp; Politika i &nbsp;
+                    Privatnost</a>&nbsp; Politika i &nbsp;
                   <a href="javscript:void(0)" class="forma__link"> naknade</a>.
                 </label>
                 <button type="submit" class="btn forma__btn">
@@ -103,11 +102,6 @@
 <?php
 require('./database.php');
 
-function display()
-{
-  styledVarDump($_POST);
-  styledPrintR($_POST);
-}
 
 define('REGEX_NAME', '/^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/');
 define('REGEX_DATE', '/^\d{4}-\d{2}-\d{2}$/');
@@ -155,22 +149,59 @@ function run($connection)
     return;
   }
 
+  function isAdult($date_of_birth)
+  {
+    $date_of_birth = new DateTime($date_of_birth);
+    $current_date = new DateTime(date("Y-m-d"));
+    $years_old = $current_date->diff($date_of_birth);
+    return $years_old->y >= 18;
+  }
 
-  //  $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
-  //  $errors[] = "Netacan format datuma";
-  //  $errors[] = "Passport number must be a valid number.";
+
+
+  function isDateInFuture($datum)
+  {
+    $trenutni_datum = new DateTime(date("Y-m-d"));
+    $timestamp = $trenutni_datum->getTimestamp() - 1;
+    $datum_forme = strtotime($datum);
+    return $datum_forme > $timestamp;
+  }
 
 
   if (!validate($ime_i_prezime, REGEX_NAME)) {
-    $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+    $errors[] = "BE Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
   }
 
   if (!validate($datum_rodjenja, REGEX_DATE)) {
-    $errors[] = "Netacan format datuma";
+    $errors[] = "BE Netacan format datuma";
+  }
+
+  if (!isAdult($datum_rodjenja)) {
+    $errors[] = "BE Nemate 18 godina da bi ste popunili formu";
+  }
+
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = "BE Neispravan format email-a";
   }
 
   if (!validate($broj_pasosa, REGEX_PASSPORT)) {
-    $errors[] = "Passport number must be a valid number.";
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!validate($datum_putovanja_od, REGEX_DATE)) {
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!isDateInFuture($datum_putovanja_od)) {
+    $errors[] = "BE Datum putovanja od mora biti u buducnosti";
+  }
+
+  if (!validate($datum_putovanja_do, REGEX_DATE)) {
+    $errors[] = "BE Neispravan broj pasosa.";
+  }
+
+  if (!isDateInFuture($datum_putovanja_do)) {
+    $errors[] = "BE Datum putovanja do mora biti u buducnosti";
   }
 
   if (!empty($errors)) {
@@ -202,22 +233,27 @@ function run($connection)
       for ($i = 0; $i < count($_POST['grupno_ime_i_prezime']); $i++) {
         $puno_ime = $_POST['grupno_ime_i_prezime'][$i];
         if (!validate($puno_ime, REGEX_NAME)) {
-          $errors[] = "Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
+          $errors[] = "BE Ime i prezime mora biti najmanje 4 karaktera dugacko i sadrzi najvise 2 prazna prostora(space)";
         }
 
         $datum_rodjenja = $_POST['grupni_datum_rodjenja'][$i];
         if (!validate($datum_rodjenja, REGEX_DATE)) {
-          $errors[] = "Netacan format datuma";
+          $errors[] = "BE Netacan format datuma";
+        }
+
+        if (isDateInFuture($datum_rodjenja)) {
+          $errors[] = "BE Datum rodjenja nemoze biti u buducnosti";
         }
 
         $broj_pasosa = $_POST['grupni_broj_pasosa'][$i];
         if (!validate($broj_pasosa, REGEX_PASSPORT)) {
-          $errors[] = "Broj pasosa nije validan";
+          $errors[] = "BE Broj pasosa nije validan";
         }
       }
       if (!empty($errors)) {
         $connection->rollBack();
         displayErrorMessage(implode("<br>", $errors));
+        $_POST = [];
         return;
       }
 
@@ -232,7 +268,6 @@ function run($connection)
       }
     }
     $connection->commit();
-
     echo "<script>
       function displaySuccessMessage(){
         let messageBox = document.querySelector('.forma__success')
@@ -243,6 +278,6 @@ function run($connection)
       }
       displaySuccessMessage();
     </script>";
+
   }
 }
-

@@ -1,15 +1,12 @@
 .forma {
   padding: 120px 0 40px 0;
   background-color: var(--whitish);
+  box-sizing: border-box;
 }
-.forma__container {
-  @media only screen and (min-width: 768px) and (max-width: 1024px) {
-    padding: 65px 109px 114px 109px;
-  }
 
-  @media only screen and (min-width: 120px) and (max-width: 767px) {
-    padding: 57px 0 55px 0;
-  }
+.forma__container {
+  width: 100%;
+  height: 100%;
 }
 
 .forma__headline {
@@ -20,12 +17,15 @@
   color: var(--almostBlack);
   text-align: center;
   width: 100%;
-  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+}
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__headline {
     margin-bottom: 60px;
     font-size: 28px;
   }
-
-  @media only screen and (min-width: 120px) and (max-width: 767px) {
+}
+@media only screen and (min-width: 120px) and (max-width: 767px) {
+  .forma__headline {
     margin-bottom: 41px;
     font-size: 23px;
   }
@@ -37,18 +37,27 @@
   display: flex;
   gap: 30px;
 }
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__header {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
 
 .forma__image {
   align-self: stretch;
   width: 50%;
   background-size: 100% auto;
-  @media only screen and (min-width: 120px) and (max-width: 1024px) {
-    display: none;
-  }
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
+}
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__image {
+    width: 100%;
+    background-image: none !important;
+  }
 }
 
 .forma__form-wrap {
@@ -58,13 +67,16 @@
   border-radius: 5px;
   padding: 15px;
 }
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__form-wrap {
+    width: 100%;
+  }
+}
 
 .forma__form {
   display: block;
   width: 100%;
-  @media only screen and (min-width: 120px) and (max-width: 1024px) {
-    width: 100%;
-  }
+  height: 100%;
 }
 
 .forma__label {
@@ -74,9 +86,17 @@
   line-height: 24px;
   color: var(--darkGrey);
   display: block;
-  @media only screen and (min-width: 120px) and (max-width: 1024px) {
+}
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__label {
     font-size: 14px;
   }
+}
+
+.forma__input::-moz-placeholder {
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--formGrey);
 }
 
 .forma__input::placeholder {
@@ -98,11 +118,15 @@
   color: var(--darkGrey);
   font-weight: 600;
   font-size: 18px;
-  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .forma__input {
     max-width: 498px;
     height: 58px;
   }
-  @media only screen and (min-width: 120px) and (max-width: 767px) {
+}
+@media only screen and (min-width: 120px) and (max-width: 1024px) {
+  .forma__input {
     padding-left: 15px;
     margin-bottom: 19px;
   }
@@ -115,9 +139,15 @@
   padding-left: 20px;
   margin-bottom: 21px;
   padding-top: 22px;
-  @media only screen and (min-width: 120px) and (max-width: 767px) {
+}
+@media only screen and (min-width: 120px) and (max-width: 767px) {
+  .forma__input--message {
     height: 102px;
   }
+}
+
+.forma__input--message::-moz-placeholder {
+  margin: auto;
 }
 
 .forma__input--message::placeholder {
@@ -133,37 +163,19 @@
   color: var(--darkGrey);
   width: 100%;
   font-weight: 400;
-  @media only screen and (min-width: 120px) and (max-width: 767px) {
+  color: var(--almostBlack);
+}
+@media only screen and (min-width: 120px) and (max-width: 767px) {
+  .forma__label--terms {
     margin-right: 35px;
+    display: none;
   }
 }
 
 .forma__check {
-  display: none;
-}
-
-.forma__box {
-  width: 19px;
-  height: 19px;
-  border: 1px solid var(--formGrey);
-  border-radius: 5px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.forma__box::after {
-  content: '\2713';
-  color: var(--whitish);
-  font-weight: 600;
-  font-size: 18px;
-}
-
-.forma__check:checked + .forma__box::after {
-  color: var(--orange);
-  transition: 0.3s ease;
+  transform: scale(1.4);
+  accent-color: var(--white);
+  margin-right: 8px;
 }
 
 .forma__link {
@@ -181,7 +193,7 @@
   display: block;
 }
 
-input[type='date']::-webkit-calendar-picker-indicator {
+input[type=date]::-webkit-calendar-picker-indicator {
   width: 15px;
   height: 15px;
   padding-right: 15px;
@@ -268,8 +280,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
   width: 27px;
   height: 27px;
   position: absolute;
-  left: calc(50% - 27px / 2 - 10px);
-  top: calc(50% - 27px / 2);
+  left: calc(50% - 13.5px - 10px);
+  top: calc(50% - 13.5px);
   border-radius: 50%;
   background: var(--white);
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
@@ -282,8 +294,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .forma__checkbox:checked + .forma__switch .forma__slider {
-  left: calc(50% - 27px / 2 + 10px);
-  top: calc(50% - 27px / 2);
+  left: calc(50% - 13.5px + 10px);
+  top: calc(50% - 13.5px);
 }
 
 .forma__wrapper {
@@ -295,7 +307,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .forma__additional-fields {
-  padding: 0 20px;
+  padding: 0;
   width: 100%;
 }
 
