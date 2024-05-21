@@ -14,8 +14,8 @@ Live url aplikacije na https://lex.evolvadigital.com/
 - gd2
 - intl
 - mbstring
-- pod_mysql
-- pdo_mysqli
+- pdo_mysql
+- pdo_mysqlite
 
 ## Pokretanje na lokalnoj masini
 Ukoliko imate instalirane extenzije dovoljno je da pokrenete server u lokalu komandom
