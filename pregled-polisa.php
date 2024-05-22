@@ -72,8 +72,8 @@
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 
-        $total_pages_query = $connection->query("SELECT COUNT(*) FROM polise")->fetchColumn();
-        $paginate_amount = (int)ceil($total_pages_query / RECORDS_PER_PAGE);
+        $total_records_query = $connection->query("SELECT COUNT(*) FROM polise")->fetchColumn();
+        $paginate_amount = (int)ceil($total_records_query / RECORDS_PER_PAGE);
     }
 
     // display funkcije
