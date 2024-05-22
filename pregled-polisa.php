@@ -137,14 +137,15 @@
         $back = $current_page - 1;
         $forward = $current_page + 1;
         // back button
-        echo "<a href='?page=($back)' class='tb__pagination-link tb__pagination-link--back'";
+        echo "<a href='?page=$back' class='tb__pagination-link tb__pagination-link--back ";
 
         if ($current_page === 1) {
-            echo "disabled";
+            echo "tb__pagination-link--disabled";
         }
-        echo ">back</a>";
+        echo "'>Prev</a>";
 
         /// pagination links
+       if($pages <= 10){
         for ($i = 1; $i < $pages+1; $i++) {
             if ($i === $current_page) {
                 echo "<a href='?page=$i' class='tb__pagination-link tb_pagination-link--active'>$i</a>";
@@ -152,14 +153,27 @@
                 echo "<a href='?page=$i' class='tb__pagination-link'>$i</a>";
             }
         }
+       } else {
+        $start = $current_page - 5;
+        $end = $current_page + 5;
+        for ($i = $start; $i <= $end; $i++) {
+            if ($i === $current_page) {
+                echo "<a href='?page=$i' class='tb__pagination-link tb_pagination-link--active'>$i</a>";
+            } else {
+                echo "<a href='?page=$i' class='tb__pagination-link'>$i</a>";
+            }
+        }
+        echo "<a href='' class='tb__pagination-link'>...</a>";
+        echo "<a href='?page=$pages' class='tb__pagination-link tb__pagination-link--disabled'>$pages</a>";
+       }
         // forward button
 
-        echo "<a href='?page=($forward)' class='tb__pagination-link tb__pagination-link--forward'";
+        echo "<a href='?page=$forward' class='tb__pagination-link tb__pagination-link--forward ";
 
         if ($current_page === $pages) {
-            echo "disabled";
+            echo "tb__pagination-link--disabled";
         }
-        echo ">back</a>";
+        echo "'>Next</a>";
     }
 
     ?>

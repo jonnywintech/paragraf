@@ -133,3 +133,16 @@
 .tb_pagination-link--active {
   background-color: var(--lightGb);
 }
+
+.tb__pagination-link--back {
+  margin-right: 5px;
+}
+
+.tb__pagination-link--forward {
+  margin-left: 5px;
+}
+
+.tb__pagination-link--disabled {
+  pointer-events: none;
+  background-color: #cccccc;
+}
