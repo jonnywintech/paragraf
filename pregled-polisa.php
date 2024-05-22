@@ -34,6 +34,8 @@
 
     require('./src/partials/header.php');
 
+    define('RECORDS_PER_PAGE', 10);
+
 
     if (isset($_GET['id'])) {
         $polisa_id = $_GET['id'];
@@ -48,14 +50,30 @@
         $nosioc = $connection->prepare($sqlNosioc);
         $nosioc->execute();
         $nosioc = $nosioc->fetchAll(PDO::FETCH_ASSOC);
-    }else {
+    } else {
+
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+        if ($current_page < 1) {
+            $current_page = 1;
+        }
+
+        $offset = ($current_page - 1) * RECORDS_PER_PAGE;
+
         $sql = "SELECT * FROM polise
-            ORDER BY polise.created_at DESC";
+            ORDER BY polise.created_at DESC LIMIT :limit OFFSET :offset ";
 
-    $statement = $connection->prepare($sql);
-    $statement->execute();
+        $statement = $connection->prepare($sql);
 
-    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement->bindValue(':limit', RECORDS_PER_PAGE, PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $total_pages_query = $connection->query("SELECT COUNT(*) FROM polise")->fetchColumn();
+        $paginate_amount = (int)ceil($total_pages_query / RECORDS_PER_PAGE);
     }
 
     // display funkcije
@@ -112,6 +130,38 @@
             ";
     }
 
+
+    function printPagination($current_page, $pages)
+    {
+    
+        $back = $current_page - 1;
+        $forward = $current_page + 1;
+        // back button
+        echo "<a href='?page=($back)' class='tb__pagination-link tb__pagination-link--back'";
+
+        if ($current_page === 1) {
+            echo "disabled";
+        }
+        echo ">back</a>";
+
+        /// pagination links
+        for ($i = 1; $i < $pages+1; $i++) {
+            if ($i === $current_page) {
+                echo "<a href='?page=$i' class='tb__pagination-link tb_pagination-link--active'>$i</a>";
+            } else {
+                echo "<a href='?page=$i' class='tb__pagination-link'>$i</a>";
+            }
+        }
+        // forward button
+
+        echo "<a href='?page=($forward)' class='tb__pagination-link tb__pagination-link--forward'";
+
+        if ($current_page === $pages) {
+            echo "disabled";
+        }
+        echo ">back</a>";
+    }
+
     ?>
     <main>
         <section class="tb">
@@ -160,17 +210,14 @@
                                 foreach ($results as $result) {
 
                                     printRowNosioc($result);
-
                                 }
                             } else {
-                                
-                                    printRowNosioc($nosioc[0]);
-                                    foreach ($osiguranici as $osoba) {
 
-                                        printRowGrupno($osoba);
+                                printRowNosioc($nosioc[0]);
+                                foreach ($osiguranici as $osoba) {
 
-                                    }
-
+                                    printRowGrupno($osoba);
+                                }
                             }
                             ?>
                         </tbody>
@@ -178,6 +225,13 @@
                     <?php
                     if (isset($_GET['id'])) {
                         echo "<a href='pregled-polisa.php' class='btn tb__button tb__button--back'>Nazad</a>";
+                    }
+                    ?>
+                </div>
+                <div class="tb__pagination">
+                    <?php
+                    if (!isset($_GET['id'])) {
+                        printPagination($current_page, $paginate_amount);
                     }
                     ?>
                 </div>

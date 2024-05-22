@@ -112,3 +112,24 @@
 .tb__btn:active {
   transform: scale(0.95);
 }
+
+.tb__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+}
+
+.tb__pagination-link {
+  text-decoration: none;
+  padding: 10px 15px;
+  color: var(--white);
+  background-color: var(--mediumGb);
+  transition: 0.3s  ease;
+  border-radius: 5px;
+}
+
+.tb_pagination-link--active {
+  background-color: var(--lightGb);
+}
