@@ -154,8 +154,17 @@
             }
         }
        } else {
+
         $start = $current_page - 5;
         $end = $current_page + 5;
+        if($start <= 0 ){
+            $start = 1;
+            $end = 10;
+        }elseif($current_page === $pages || $current_page + 5 > $pages){
+            $start = $pages-10;
+            $end = $pages;
+        }
+
         for ($i = $start; $i <= $end; $i++) {
             if ($i === $current_page) {
                 echo "<a href='?page=$i' class='tb__pagination-link tb_pagination-link--active'>$i</a>";
@@ -163,8 +172,7 @@
                 echo "<a href='?page=$i' class='tb__pagination-link'>$i</a>";
             }
         }
-        echo "<a href='' class='tb__pagination-link'>...</a>";
-        echo "<a href='?page=$pages' class='tb__pagination-link tb__pagination-link--disabled'>$pages</a>";
+
        }
         // forward button
 
